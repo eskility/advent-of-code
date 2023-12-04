@@ -35,7 +35,7 @@ foreach (var x in lines)
             {
                 if (sb.Length > 1)
                 {
-                    i -= 1;
+                    i -= sb.Length-1;
                 }
                 sb = sb.Clear();
             }
@@ -62,7 +62,7 @@ foreach (var x in lines)
             {
                 if (sb.Length > 1)
                 {
-                    i += 1;
+                    i += sb.Length-1;
                 }
                 sb = sb.Clear();
 
@@ -78,6 +78,7 @@ foreach (var x in lines)
     listOfNumbers.Add(int.Parse(firstNumber + secondnumber));
 }
 Console.Write(listOfNumbers.Sum());
+
 
 
 
