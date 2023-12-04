@@ -35,22 +35,20 @@ foreach (var x in lines)
             {
                 if (sb.Length > 1)
                 {
-                    i-=1;
+                    i -= 1;
                 }
                 sb = sb.Clear();
-
             }
             if (textToNumbers.ContainsKey(sb.ToString()))
             {
                 firstNumber = textToNumbers[sb.ToString()];
                 sb.Clear();
                 break;
-
             }
         }
     }
     sb = sb.Clear();
-    for (int i = x.Length-1; i >= 0; i--)
+    for (int i = x.Length - 1; i >= 0; i--)
     {
         if (char.IsDigit(x[i]))
         {
@@ -59,12 +57,12 @@ foreach (var x in lines)
         }
         else
         {
-            sb.Insert(0,x[i]);
+            sb.Insert(0, x[i]);
             if (!textToNumbers.Keys.Where(i => i.EndsWith(sb.ToString())).Any())
             {
                 if (sb.Length > 1)
                 {
-                   i+=1;
+                    i += 1;
                 }
                 sb = sb.Clear();
 
@@ -74,17 +72,12 @@ foreach (var x in lines)
                 secondnumber = textToNumbers[sb.ToString()];
                 sb.Clear();
                 break;
-
             }
         }
     }
-   
     listOfNumbers.Add(int.Parse(firstNumber + secondnumber));
 }
 Console.Write(listOfNumbers.Sum());
-
-
-
 
 
 
@@ -108,9 +101,9 @@ var textToNumbers = new Dictionary<string, string>
 foreach (var l in lines)
 {
     var line = l;
-    foreach(var x in textToNumbers)
+    foreach (var x in textToNumbers)
     {
-       line= line.Replace(x.Key,x.Key+x.Value+x.Key);
+        line = line.Replace(x.Key, x.Key + x.Value + x.Key);
     }
     var first = line.Where(char.IsDigit).First();
     var second = line.Where(char.IsDigit).Last();
