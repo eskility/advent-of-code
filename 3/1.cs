@@ -26,17 +26,13 @@ foreach (var number in listOfNumbers)
 {
     if (listOfSymbols
     .Where(symbol => symbol.Row == number.Row
-    || symbol.Row == number.Row - 1 
+    || symbol.Row == number.Row - 1
     || symbol.Row == number.Row + 1)
     .Where(symbol => symbol.Index == number.Index - 1
     || symbol.Index == number.EndIndex
     || symbol.Index <= number.EndIndex && symbol.Index >= number.Index - 1).
     Any())
-
-
-    {
         sum += number.Digits;
-    }
 }
 Console.WriteLine(sum);
 
