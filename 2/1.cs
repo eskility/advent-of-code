@@ -5,17 +5,30 @@ int redLimit = 12, greenLimit = 13, blueLimit = 14;
 var gameIdSum = 0;
 foreach (var line in file)
 {
-    var gameId = int.Parse(Regex.Match(Regex.Match(line, "(?<=Game\\s)[0-9]+").Value, @"\d+").Value);
+    var gameId  = int.Parse(Regex.Match(line, @"\d+").Value);
     var picks = line.Split(";");
 
     foreach (var pick in picks)
     {
+        var colors = pick.Split(",");
         int blue = 0, red = 0, green = 0;
+        foreach (var c in colors)
+        {
+            if (c.Contains("red"))
+            {
+                red = int.Parse(Regex.Match(c, @"\d+[ ]red").Value.Replace(" red", ""));
+            }
 
-        var dice = pick.Split(",");
-        blue = int.TryParse(Regex.Match(Regex.Match(pick, "(\\d+)[^\\d]+blue").Value, @"\d+").Value, out blue) ? blue: default(int);
-        red = int.TryParse(Regex.Match(Regex.Match(pick, "(\\d+)[^\\d]+red").Value, @"\d+").Value, out red)? red: default(int);;
-        green = int.TryParse(Regex.Match(Regex.Match(pick, "(\\d+)[^\\d]+green").Value, @"\d+").Value, out green)? green: default(int);;
+            if (c.Contains("blue"))
+            {
+                blue = int.Parse(Regex.Match(c, @"\d+[ ]blue").Value.Replace(" blue", ""));
+            }
+
+            if (c.Contains("green"))
+            {
+                green = int.Parse(Regex.Match(c, @"\d+[ ]green").Value.Replace(" green", ""));
+            }
+        }
 
         if (blue > blueLimit || red > redLimit || green > greenLimit)
         {
@@ -26,6 +39,5 @@ foreach (var line in file)
     }
     gameIdSum += gameId;
 }
-
 Console.WriteLine(gameIdSum);
 
