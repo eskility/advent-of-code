@@ -24,15 +24,18 @@ for (int i = 0; i < rows.Count; i++)
 
 foreach (var number in listOfNumbers)
 {
-    if (listOfSymbols
-    .Where(symbol => symbol.Row == number.Row
-    || symbol.Row == number.Row - 1
-    || symbol.Row == number.Row + 1)
-    .Where(symbol => symbol.Index == number.Index - 1
-    || symbol.Index == number.EndIndex
-    || symbol.Index <= number.EndIndex && symbol.Index >= number.Index - 1).
-    Any())
-        sum += number.Digits;
+    var x = 0;
+    foreach (var symbol in listOfSymbols)
+    {
+        if (number.Row == symbol.Row - 1 || number.Row == symbol.Row + 1 || number.Row == symbol.Row)
+        {
+            if (number.Index - 1 == symbol.Index || number.EndIndex == symbol.Index)
+                x = number.Digits;
+            else if (symbol.Index <= number.EndIndex && symbol.Index >= number.Index - 1)
+                x = number.Digits;
+        }
+    }
+    sum += x;
 }
 Console.WriteLine(sum);
 
