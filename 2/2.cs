@@ -9,25 +9,12 @@ foreach (var line in file)
     int blue = 0, red = 0, green = 0;
     foreach (var pick in picks)
     {
-        var colors = pick.Split(",");
-
-        foreach (var c in colors)
-        {
-            if (c.Contains("red"))
-            {
-                red = Math.Max(red, int.Parse(Regex.Match(c, @"\d+[ ]red").Value.Replace(" red", "")));
-            }
-
-            if (c.Contains("blue"))
-            {
-                blue = Math.Max(blue, int.Parse(Regex.Match(c, @"\d+[ ]blue").Value.Replace(" blue", "")));
-            }
-
-            if (c.Contains("green"))
-            {
-                green = Math.Max(green, int.Parse(Regex.Match(c, @"\d+[ ]green").Value.Replace(" green", "")));
-            }
-        }
+        if (pick.Contains("red"))
+            red = Math.Max(red, int.Parse(Regex.Match(pick, @"\d+[ ]red").Value.Replace(" red", "")));
+        if (pick.Contains("blue"))
+            blue = Math.Max(blue, int.Parse(Regex.Match(pick, @"\d+[ ]blue").Value.Replace(" blue", "")));
+        if (pick.Contains("green"))
+            green = Math.Max(green, int.Parse(Regex.Match(pick, @"\d+[ ]green").Value.Replace(" green", "")));
     }
     minimumSet += red * blue * green;
 }
