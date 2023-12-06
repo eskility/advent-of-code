@@ -2,31 +2,29 @@ using System.Text.RegularExpressions;
 
 var file = File.ReadAllText("input.txt");
 
-var blocks = file.Split("\n\n");
+var text = file.Split("\n\n");
+var intialSeeds = Regex.Matches(text[0].Split(":")[1], @"\d+").Select(x => long.Parse(x.Value)).ToList();
 
-var seeds = Regex.Matches(blocks[0].Split(":")[1], @"\d+").Select(x => long.Parse(x.Value)).ToList();
-
-for (int i = 1; i < blocks.Length; i++)
+foreach (var mapData in text.Skip(1))
 {
-    var maps = new List<Map>();
-    var lines = blocks[i].Split("\n");
-    for (int line = 1; line < lines.Length; line++)
+    var allMaps = mapData.Split("\n");
+    var map = new List<Map>();
+
+    foreach (var m in allMaps.Skip(1))
     {
-        var numbers = Regex.Matches(lines[line], @"\d+").Select(x => long.Parse(x.Value)).ToList();
-        maps.Add(new Map(numbers[0], numbers[1], numbers[2]));
-
+        var numbers = Regex.Matches(m, @"\d+").Select(x => long.Parse(x.Value)).ToList();
+        map.Add(new Map(numbers[0], numbers[1], numbers[2]));
     }
-
     var matches = new List<long>();
-    foreach (var x in seeds)
+    foreach (var x in intialSeeds)
     {
         var resultFound = false;
-        foreach (var map in maps)
+        foreach (var m in map)
         {
-            if (map.Source <= x && x < map.Source + map.Range)
+            if (m.Source <= x && x < m.Source + m.Range)
             {
                 resultFound = true;
-                matches.Add(x - map.Source + map.Destination);
+                matches.Add(x - m.Source + m.Destination);
                 break;
             }
         }
@@ -34,10 +32,10 @@ for (int i = 1; i < blocks.Length; i++)
 
             matches.Add(x);
     }
-    seeds = matches;
+    intialSeeds = matches;
 }
 
-Console.WriteLine(seeds.Min());
+Console.WriteLine(intialSeeds.Min());
 
 class Map(long _destination, long _source, long _range)
 {
