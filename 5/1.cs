@@ -1,197 +1,47 @@
 using System.Text.RegularExpressions;
 
-var file = File.ReadLines("input.txt");
+var file = File.ReadAllText("input.txt");
 
-var listOfSeeds = new List<Seed>();
-var seeddict = new Dictionary<long, Seed>();
+var blocks = file.Split("\n\n");
 
-var currentOperation = "";
+var seeds = Regex.Matches(blocks[0].Split(":")[1], @"\d+").Select(x => long.Parse(x.Value)).ToList();
 
-foreach (var line in file)
+for (int i = 1; i < blocks.Length; i++)
 {
-    if (line.Contains(':'))
+    var maps = new List<Map>();
+    var lines = blocks[i].Split("\n");
+    for (int line = 1; line < lines.Length; line++)
     {
-        var operation = line.Split(":");
-        currentOperation = operation[0];
-    }
-    var matches = Regex.Matches(line, @"\d+").Select(x => long.Parse(x.Value)).ToList();
+        var numbers = Regex.Matches(lines[line], @"\d+").Select(x => long.Parse(x.Value)).ToList();
+        maps.Add(new Map(numbers[0], numbers[1], numbers[2]));
 
-    if (currentOperation == "seeds")
-    {
-        foreach (var match in matches)
-            seeddict.Add(match, new Seed(match));
     }
-    if (currentOperation == "seed-to-soil map")
+
+    var matches = new List<long>();
+    foreach (var x in seeds)
     {
-        if (matches.Count > 0)
+        var resultFound = false;
+        foreach (var map in maps)
         {
-            var destination = matches[0];
-            var source = matches[1];
-            var sourcerange = source + matches[2];
-            var destinationrange = destination + matches[2];
-            foreach (var seed in seeddict.Values)
+            if (map.Source <= x && x < map.Source + map.Range)
             {
-                var remaining = seed.SeedId - source % sourcerange;
-                if (seed.SeedId >= source && seed.SeedId <= sourcerange)
-                {
-                    seed.SoilId = destination + remaining;
-                }
-                else
-                    seed.SoilId = seed.SeedId;
+                resultFound = true;
+                matches.Add(x - map.Source + map.Destination);
+                break;
             }
         }
+        if (!resultFound)
+
+            matches.Add(x);
     }
-    if (currentOperation == "soil-to-fertilizer map")
-    {
-        if (matches.Count > 0)
-        {
-            var destination = matches[0];
-            var source = matches[1];
-            var sourcerange = source + matches[2];
-            var destinationrange = destination + matches[2];
-
-            foreach (var seed in seeddict.Values)
-            {
-                if (seed.SoilId == 0)
-                    seed.SoilId = seed.SeedId;
-                var remaining = seed.SoilId - source % sourcerange;
-                if (seed.SoilId >= source && seed.SoilId <= sourcerange)
-                {
-                    seed.FertilizerId = destination + remaining;
-                }
-            }
-        }
-    }
-    if (currentOperation == "fertilizer-to-water map")
-    {
-        if (matches.Count > 0)
-        {
-            var destination = matches[0];
-            var source = matches[1];
-            var sourcerange = source + matches[2];
-            var destinationrange = destination + matches[2];
-
-            foreach (var seed in seeddict.Values)
-            {
-                if (seed.FertilizerId == 0)
-                    seed.FertilizerId = seed.SoilId;
-                var remaining = seed.FertilizerId - source % sourcerange;
-                if (seed.FertilizerId >= source && seed.FertilizerId <= sourcerange)
-                {
-                    seed.WaterId = destination + remaining;
-                }
-
-            }
-        }
-    }
-
-    if (currentOperation == "water-to-light map")
-    {
-        if (matches.Count > 0)
-        {
-            var destination = matches[0];
-            var source = matches[1];
-            var sourcerange = source + matches[2];
-            var destinationrange = destination + matches[2];
-
-            foreach (var seed in seeddict.Values)
-            {
-                if (seed.WaterId == 0)
-                    seed.WaterId = seed.FertilizerId;
-                var remaining = seed.WaterId - source % sourcerange;
-                if (seed.WaterId >= source && seed.WaterId <= sourcerange)
-                {
-                    seed.LightId = destination + remaining;
-                }
-
-            }
-        }
-    }
-    if (currentOperation == "light-to-temperature map")
-    {
-        if (matches.Count > 0)
-        {
-            var destination = matches[0];
-            var source = matches[1];
-            var sourcerange = source + matches[2];
-            var destinationrange = destination + matches[2];
-
-            foreach (var seed in seeddict.Values)
-            {
-                if (seed.LightId == 0)
-                    seed.LightId = seed.WaterId;
-                var remaining = seed.LightId - source % sourcerange;
-                if (seed.LightId >= source && seed.LightId <= sourcerange)
-                {
-                    seed.TemperatureId = destination + remaining;
-                }
-            }
-        }
-
-    }
-    if (currentOperation == "temperature-to-humidity map")
-    {
-        if (matches.Count > 0)
-        {
-            var destination = matches[0];
-            var source = matches[1];
-            var sourcerange = source + matches[2];
-            var destinationrange = destination + matches[2];
-
-            foreach (var seed in seeddict.Values)
-            {
-                if (seed.TemperatureId == 0)
-                    seed.TemperatureId = seed.LightId;
-                var remaining = seed.TemperatureId - source % sourcerange;
-                if (seed.TemperatureId >= source && seed.TemperatureId <= sourcerange)
-                {
-                    seed.HumidityId = destination + remaining;
-                }
-            }
-        }
-    }
-    if (currentOperation == "humidity-to-location map")
-    {
-        if (matches.Count > 0)
-        {
-            var destination = matches[0];
-            var source = matches[1];
-            var sourcerange = source + matches[2];
-            var destinationrange = destination + matches[2];
-
-            foreach (var seed in seeddict.Values)
-            {
-                if (seed.HumidityId == 0)
-                    seed.HumidityId = seed.TemperatureId;
-                var remaining = seed.HumidityId - source % sourcerange;
-                if (seed.HumidityId >= source && seed.HumidityId <= sourcerange)
-                {
-                    seed.LocationId = destination + remaining;
-                }
-            }
-        }
-    }
-}
-foreach (var seed in seeddict.Values)
-{
-    if (seed.LocationId == 0)
-        seed.LocationId = seed.HumidityId;
+    seeds = matches;
 }
 
-Console.WriteLine(seeddict.Values.Select(x => x.LocationId).Min());
+Console.WriteLine(seeds.Min());
 
-
-
-
-class Seed(long _seedid)
+class Map(long _destination, long _source, long _range)
 {
-    public long SeedId { get; set; } = _seedid;
-    public long FertilizerId { get; set; }
-    public long SoilId { get; set; }
-    public long WaterId { get; set; }
-    public long LightId { get; set; }
-    public long TemperatureId { get; set; }
-    public long HumidityId { get; set; }
-    public long LocationId { get; set; }
-
+    public long Destination { get; set; } = _destination;
+    public long Source { get; set; } = _source;
+    public long Range { get; set; } = _range;
 }
