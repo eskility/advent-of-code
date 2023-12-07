@@ -2,17 +2,16 @@
 
 var file = File.ReadAllText("input.txt");
 var lines = file.Split("\n");
-
 var time = Regex.Matches(lines[0], @"\d+").Select(x => int.Parse(x.Value)).ToList();
 var distance = Regex.Matches(lines[1], @"\d+").Select(x => int.Parse(x.Value)).ToList();
-
 var races = new Race[time.Count];
+var raceBoat = new Boat();
+
 for (int i = 0; i < races.Length; i++)
 {
     races[i] = new Race(time[i], distance[i]);
 }
 
-var raceBoat = new Boat();
 foreach (var race in races)
 {
     for (int i = 0; i < race.Duration; i++)
@@ -22,7 +21,7 @@ foreach (var race in races)
     }
 }
 
-Console.Write(races.Select(x=> x.WaysToBeatTheRecord).Aggregate((x, y) => x * y));
+Console.Write(races.Select(x => x.WaysToBeatTheRecord).Aggregate((x, y) => x * y));
 
 class Race(int _time, int _distance)
 {
