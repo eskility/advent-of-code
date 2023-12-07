@@ -1,41 +1,34 @@
-﻿using System.Text.RegularExpressions;
-
-var file = File.ReadAllText("input.txt");
+﻿var file = File.ReadAllText("input.txt");
 var lines = file.Split("\n");
-var time = Regex.Matches(lines[0], @"\d+").Select(x => int.Parse(x.Value)).ToList();
-var distance = Regex.Matches(lines[1], @"\d+").Select(x => int.Parse(x.Value)).ToList();
-var races = new Race[time.Count];
+var time = long.Parse(lines[0].Split(":")[1].Replace(" ", "")); 
+var distance = long.Parse(lines[1].Split(":")[1].Replace(" ", "")); 
+var race = new Race(time, distance);
 var raceBoat = new Boat();
 
-for (int i = 0; i < races.Length; i++)
+
+
+for (long i = 0; i < race.Duration; i++)
 {
-    races[i] = new Race(time[i], distance[i]);
+    raceBoat.Button(i);
+    raceBoat.Race(race);
 }
 
-foreach (var race in races)
-{
-    for (int i = 0; i < race.Duration; i++)
-    {
-        raceBoat.Button(i);
-        raceBoat.Race(race);
-    }
-}
 
-Console.Write(races.Select(x => x.WaysToBeatTheRecord).Aggregate((x, y) => x * y));
+Console.Write(race.WaysToBeatTheRecord);
 
-class Race(int _time, int _distance)
+class Race(long _time, long _distance)
 {
-    public int RecordDistance { get; set; } = _distance;
-    public int Duration { get; set; } = _time;
-    public int WaysToBeatTheRecord { get; set; }
+    public long RecordDistance { get; set; } = _distance;
+    public long Duration { get; set; } = _time;
+    public long WaysToBeatTheRecord { get; set; }
 }
 class Boat()
 {
-    public int Speed { get; set; }
-    public int ButtonHeld { get; set; }
-    public int DistanceCovered { get; set; }
+    public long Speed { get; set; }
+    public long ButtonHeld { get; set; }
+    public long DistanceCovered { get; set; }
 
-    public void Button(int duration)
+    public void Button(long duration)
     {
         ButtonHeld = duration;
         Speed = duration;
