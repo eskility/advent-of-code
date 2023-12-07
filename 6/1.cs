@@ -16,7 +16,7 @@ foreach (var race in races)
 {
     for (int i = 0; i < race.Duration; i++)
     {
-        raceBoat.HoldButton(i);
+        raceBoat.Button(i);
         raceBoat.Race(race);
     }
 }
@@ -35,10 +35,10 @@ class Boat()
     public int ButtonHeld { get; set; }
     public int DistanceCovered { get; set; }
 
-    public void HoldButton(int holdButton)
+    public void Button(int duration)
     {
-        ButtonHeld = holdButton;
-        Speed = holdButton;
+        ButtonHeld = duration;
+        Speed = duration;
     }
     public void Race(Race race)
     {
