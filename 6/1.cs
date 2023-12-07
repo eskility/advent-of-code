@@ -5,17 +5,13 @@ var distance = long.Parse(lines[1].Split(":")[1].Replace(" ", ""));
 var race = new Race(time, distance);
 var raceBoat = new Boat();
 
-
-
 for (long i = 0; i < race.Duration; i++)
 {
     raceBoat.Button(i);
     raceBoat.Race(race);
 }
 
-
 Console.Write(race.WaysToBeatTheRecord);
-
 class Race(long _time, long _distance)
 {
     public long RecordDistance { get; set; } = _distance;
@@ -39,5 +35,4 @@ class Boat()
         if (DistanceCovered > race.RecordDistance)
             race.WaysToBeatTheRecord++;
     }
-
 }
