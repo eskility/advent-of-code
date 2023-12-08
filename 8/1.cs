@@ -1,13 +1,11 @@
 var file = File.ReadAllText("input.txt");
 var lines = file.Split("\n");
-
-var instructions = lines[0].Where(char.IsLetter).ToList();
+var directions = lines[0].Where(char.IsLetter).ToList();
 var graph = new Dictionary<string, Node>();
+
 foreach (var line in lines.Skip(2))
 {
     var nodeData = line.Replace(" ", "").Replace("(", "").Replace(")", "").Split("=");
-
-
     var node = new Node(nodeData[0]);
     if (graph.ContainsKey(node.Id))
     {
@@ -16,38 +14,33 @@ foreach (var line in lines.Skip(2))
     else
         graph.Add(node.Id, node);
 
-    var left = new Node(nodeData[1].Split(",")[0]);
-    var right = new Node(nodeData[1].Split(",")[1]);
-    graph[node.Id].Left = left;
-    graph[node.Id].Right = right;
-
+    graph[node.Id].Left = new Node(nodeData[1].Split(",")[0]);
+    graph[node.Id].Right = new Node(nodeData[1].Split(",")[1]); 
 }
 
-var stepCounter = 0;
-var currentNode = graph["AAA"];
-var i = 0;
-while (currentNode.Id != "ZZZ")
+GraphSearcher(graph["AAA"], 0, directions, 0);
+
+
+void GraphSearcher(Node node, int counter, List<char> directions, int directionCounter)
 {
-    if (i == instructions.Count)
-        i = 0;
 
-    stepCounter++;
+    node = graph[node.Id];
+    if (node.Id == "ZZZ")
+        Console.WriteLine(counter);
+    else 
+    {
+        if (directionCounter == directions.Count)
+            directionCounter = 0;
 
-    if (instructions[i] == 'L')
-        currentNode = graph[currentNode.Left.Id];
-    else
-        currentNode = graph[currentNode.Right.Id];
-
-
-    i++;
-
+        if (directions[directionCounter] == 'L')
+            GraphSearcher(node.Left, counter + 1, directions, directionCounter + 1);
+        else
+            GraphSearcher(node.Right, counter + 1, directions, directionCounter + 1);
+    }
 }
-
-Console.WriteLine(stepCounter);
 
 class Node(string _id)
 {
-
     public string Id { get; set; } = _id;
     public Node? Left { get; set; }
     public Node? Right { get; set; }
