@@ -71,16 +71,15 @@ class Hand
 
         foreach (var card in Cards)
             cardArray[card]++;
-
-
+        
         var jokers = cardArray[1];
-
         var currentBest = Set.HighCard;
+        
         for (int i = 2; i < cardArray.Length; i++)
         {
             if (cardArray[i] + jokers == 5)
             {
-                if (Set.FiveOfAKind > currentBest)
+                if (Set.FiveOfAKind > currentBest) 
                     currentBest = Set.FiveOfAKind;
             }
 
@@ -92,11 +91,11 @@ class Hand
 
             else if (cardArray[i] + jokers == 3)
             {
-
                 if (Set.ThreeOfAKind > currentBest)
-
                     currentBest = Set.ThreeOfAKind;
+                
                 var jokersRemaining = jokers - (3 - cardArray[i]);
+                
                 for (int j = 2; j < cardArray.Length; j++)
                 {
                     if (j != 1 && i != j && cardArray[j] + jokersRemaining == 2)
@@ -110,8 +109,9 @@ class Hand
             {
                 if (Set.OnePair > currentBest)
                     currentBest = Set.OnePair;
+                
                 var jokersRemaining = jokers - (2 - cardArray[i]);
-
+                
                 for (int j = 2; j < cardArray.Length; j++)
                 {
                     if (j != 1 && i != j && cardArray[j] + jokersRemaining == 2)
