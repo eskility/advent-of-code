@@ -1,16 +1,6 @@
-
-using System.ComponentModel;
-using System.Diagnostics.Metrics;
-using System.Dynamic;
-using System.Security.Cryptography.X509Certificates;
-
 var file = File.ReadAllText("input.txt");
 var lines = file.Split("\n");
 var listOfHands = new List<Hand>();
-
-
-
-
 
 foreach (var line in lines)
 {
@@ -28,14 +18,7 @@ foreach (var line in lines)
     listOfHands.Add(new Hand(cards, bid, cardsOrder));
 }
 var bidsSummed = 0;
-var listsorted = new List<Hand>();
-listsorted.AddRange(SelectionSort(listOfHands.Where(x => x.Strength == Hand.Set.HighCard).ToList()));
-listsorted.AddRange(SelectionSort(listOfHands.Where(x => x.Strength == Hand.Set.OnePair).ToList()));
-listsorted.AddRange(SelectionSort(listOfHands.Where(x => x.Strength == Hand.Set.TwoPairs).ToList()));
-listsorted.AddRange(SelectionSort(listOfHands.Where(x => x.Strength == Hand.Set.ThreeOfAKind).ToList()));
-listsorted.AddRange(SelectionSort(listOfHands.Where(x => x.Strength == Hand.Set.FullHouse).ToList()));
-listsorted.AddRange(SelectionSort(listOfHands.Where(x => x.Strength == Hand.Set.FourOfAKind).ToList()));
-listsorted.AddRange(SelectionSort(listOfHands.Where(x => x.Strength == Hand.Set.FiveOfAKind).ToList()));
+var listsorted = SelectionSort(listOfHands);
 var rank = 1;
 
 foreach (var hand in listsorted)
@@ -46,7 +29,6 @@ foreach (var hand in listsorted)
 
 Console.WriteLine(bidsSummed);
 
-
 static List<Hand> SelectionSort(List<Hand> hands)
 {
     int n = hands.Count;
@@ -55,14 +37,21 @@ static List<Hand> SelectionSort(List<Hand> hands)
         int smallestIndex = i;
         for (int j = i + 1; j < n; j++)
         {
-            var counter = 0;
-            while (hands[j].CardsOrder[counter] == hands[smallestIndex].CardsOrder[counter])
-                counter++;
+            if (hands[j].Strength == hands[smallestIndex].Strength)
+            {
+                var counter = 0;
+                while (hands[j].CardsOrder[counter] == hands[smallestIndex].CardsOrder[counter])
+                    counter++;
+                if (hands[j].CardsOrder[counter] < hands[smallestIndex].CardsOrder[counter])
+                    smallestIndex = j;
+            }
+            else
+            {
+                if (hands[j].Strength < hands[smallestIndex].Strength)
+                    smallestIndex = j;
+            }
 
-            if (hands[j].CardsOrder[counter] < hands[smallestIndex].CardsOrder[counter])
-                smallestIndex = j;
         }
-
         (hands[i], hands[smallestIndex]) = (hands[smallestIndex], hands[i]);
     }
     return hands;
@@ -101,6 +90,7 @@ class Hand
             {
 
                 if (Set.ThreeOfAKind > currentBest)
+
                     currentBest = Set.ThreeOfAKind;
                 var jokersRemaining = jokers - (3 - Cards[i]);
                 for (int j = 2; j < Cards.Length; j++)
@@ -111,9 +101,6 @@ class Hand
                             currentBest = Set.FullHouse;
                     }
                 }
-
-
-
             }
             else if (Cards[i] + jokers == 2)
             {
@@ -129,22 +116,14 @@ class Hand
                             currentBest = Set.TwoPairs;
                     }
                 }
-
             }
-
-
-
         }
         Strength = currentBest;
-
-
-
-
     }
 
     public enum Set
     {
-        FiveOfAKind = 70000, FourOfAKind = 60000, FullHouse = 50000, ThreeOfAKind = 40000, TwoPairs = 30000, OnePair = 20000, HighCard = 10000
+        HighCard, OnePair, TwoPairs, ThreeOfAKind, FullHouse, FourOfAKind, FiveOfAKind
     }
     public static int CardLabelToRank(char x)
     {
