@@ -5,18 +5,17 @@ var listOfHands = new List<Hand>();
 foreach (var line in lines)
 {
     var split = line.Split(" ");
-    var cardsData = split[0].ToList();
+    var cardArrayData = split[0].ToList();
     var bid = int.Parse(split[1]);
-    var cards = new int[15];
-    var cardsOrder = new List<int>();
-    foreach (var x in cardsData)
+    var cardArray = new List<int>();
+    foreach (var x in cardArrayData)
     {
         var card = Hand.CardLabelToRank(x);
-        cards[card]++;
-        cardsOrder.Add(card);
+        cardArray.Add(card);
     }
-    listOfHands.Add(new Hand(cards, bid, cardsOrder));
+    listOfHands.Add(new Hand(cardArray, bid));
 }
+
 var bidsSummed = 0;
 var listsorted = SelectionSort(listOfHands);
 var rank = 1;
@@ -29,6 +28,8 @@ foreach (var hand in listsorted)
 
 Console.WriteLine(bidsSummed);
 
+
+
 static List<Hand> SelectionSort(List<Hand> hands)
 {
     int n = hands.Count;
@@ -40,9 +41,9 @@ static List<Hand> SelectionSort(List<Hand> hands)
             if (hands[j].Strength == hands[smallestIndex].Strength)
             {
                 var counter = 0;
-                while (hands[j].CardsOrder[counter] == hands[smallestIndex].CardsOrder[counter])
+                while (hands[j].Cards[counter] == hands[smallestIndex].Cards[counter])
                     counter++;
-                if (hands[j].CardsOrder[counter] < hands[smallestIndex].CardsOrder[counter])
+                if (hands[j].Cards[counter] < hands[smallestIndex].Cards[counter])
                     smallestIndex = j;
             }
             else
@@ -50,7 +51,6 @@ static List<Hand> SelectionSort(List<Hand> hands)
                 if (hands[j].Strength < hands[smallestIndex].Strength)
                     smallestIndex = j;
             }
-
         }
         (hands[i], hands[smallestIndex]) = (hands[smallestIndex], hands[i]);
     }
@@ -60,63 +60,41 @@ class Hand
 {
     public int Rank { get; set; }
     public Set Strength { get; set; }
-    public int[] Cards { get; set; }
-    public List<int> CardsOrder { get; set; }
+    public List<int> Cards { get; set; }
     public int Bid { get; set; }
 
-    public Hand(int[] _cards, int _bid, List<int> _cardsOrder)
+    public Hand(List<int> _cards, int _bid)
     {
         Bid = _bid;
         Cards = _cards;
-        CardsOrder = _cardsOrder;
+        var cardArray = new int[15];
 
-        var currentBest = Set.HighCard;
-        for (int i = 2; i < Cards.Length; i++)
+        foreach (var card in Cards)
+            cardArray[card]++;
+
+        if (cardArray.Max() == 5)
+            Strength = Set.FiveOfAKind;
+
+        else if (cardArray.Max() == 4)
+            Strength = Set.FourOfAKind;
+
+        else if (cardArray.Max() == 3)
         {
-            if (Cards[i] == 5)
-            {
-                if (Set.FiveOfAKind > currentBest)
-                    currentBest = Set.FiveOfAKind;
-            }
+            if (cardArray.Where(i => i == 2).Any())
+                Strength = Set.FullHouse;
 
-            else if (Cards[i] == 4)
-            {
-                if (Set.FourOfAKind > currentBest)
-                    currentBest = Set.FourOfAKind;
-            }
-
-            else if (Cards[i] == 3)
-            {
-                if (Set.ThreeOfAKind > currentBest)
-
-                    currentBest = Set.ThreeOfAKind;
-                for (int j = 2; j < Cards.Length; j++)
-                {
-                    if (j != 1 && i != j && Cards[j] == 2)
-                    {
-                        if (Set.FullHouse > currentBest)
-                            currentBest = Set.FullHouse;
-                    }
-                }
-            }
-            else if (Cards[i] == 2)
-            {
-                if (Set.OnePair > currentBest)
-                    currentBest = Set.OnePair;
-
-                for (int j = 2; j < Cards.Length; j++)
-                {
-                    if (j != 1 && i != j && Cards[j] == 2)
-                    {
-                        if (Set.TwoPairs > currentBest)
-                            currentBest = Set.TwoPairs;
-                    }
-                }
-            }
+            else
+                Strength = Set.ThreeOfAKind;
         }
-        Strength = currentBest;
-    }
 
+        else if (cardArray.Where(i => i == 2).Count() == 2)
+            Strength = Set.TwoPairs;
+
+        else if (cardArray.Max() == 2)
+            Strength = Set.OnePair;
+        else
+            Strength = Set.HighCard;
+    }
     public enum Set
     {
         HighCard, OnePair, TwoPairs, ThreeOfAKind, FullHouse, FourOfAKind, FiveOfAKind
