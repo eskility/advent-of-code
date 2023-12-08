@@ -12,11 +12,10 @@ foreach (var line in lines)
     {
         var card = Hand.CardLabelToRank(x);
         cardArray.Add(card);
-
     }
-
     listOfHands.Add(new Hand(cardArray, bid));
 }
+
 var bidsSummed = 0;
 var listsorted = SelectionSort(listOfHands);
 var rank = 1;
@@ -28,6 +27,8 @@ foreach (var hand in listsorted)
 }
 
 Console.WriteLine(bidsSummed);
+
+
 
 static List<Hand> SelectionSort(List<Hand> hands)
 {
@@ -71,7 +72,7 @@ class Hand
         foreach (var card in Cards)
             cardArray[card]++;
 
-      
+
         var jokers = cardArray[1];
 
         var currentBest = Set.HighCard;
