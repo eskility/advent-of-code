@@ -82,7 +82,6 @@ class Hand
         {
             if (cardArray.Where(i => i == 2).Any())
                 Strength = Set.FullHouse;
-
             else
                 Strength = Set.ThreeOfAKind;
         }
