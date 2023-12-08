@@ -5,10 +5,10 @@ var listOfHands = new List<Hand>();
 foreach (var line in lines)
 {
     var split = line.Split(" ");
-    var cardArrayData = split[0].ToList();
+    var cardData = split[0].ToList();
     var bid = int.Parse(split[1]);
     var cardArray = new List<int>();
-    foreach (var x in cardArrayData)
+    foreach (var x in cardData)
     {
         var card = Hand.CardLabelToRank(x);
         cardArray.Add(card);
