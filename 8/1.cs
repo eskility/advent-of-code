@@ -20,10 +20,10 @@ void GraphSearcher(string node, int counter, List<char> directions, int directio
     {
         if (directionCounter == directions.Count)
             directionCounter = 0;
-
         if (directions[directionCounter] == 'L')
-            GraphSearcher(graph[node][0], counter + 1, directions, directionCounter + 1);
+            node = graph[node][0];
         else
-            GraphSearcher(graph[node][1], counter + 1, directions, directionCounter + 1);
+            node = graph[node][1];
+        GraphSearcher(node, counter + 1, directions, directionCounter + 1);
     }
 }
