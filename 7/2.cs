@@ -1,26 +1,26 @@
 var file = File.ReadAllText("input.txt");
 var lines = file.Split("\n");
-var listOfHands = new List<Hand>();
+var hands = new List<Hand>();
 
 foreach (var line in lines)
 {
     var split = line.Split(" ");
     var cardData = split[0].ToList();
     var bid = int.Parse(split[1]);
-    var cardArray = new List<int>();
+    var cards = new List<int>();
     foreach (var x in cardData)
     {
         var card = Hand.CardLabelToRank(x);
-        cardArray.Add(card);
+        cards.Add(card);
     }
-    listOfHands.Add(new Hand(cardArray, bid));
+    hands.Add(new Hand(cards, bid));
 }
 
 var bidsSummed = 0;
-var listsorted = SelectionSort(listOfHands);
+hands = SelectionSort(hands);
 var rank = 1;
 
-foreach (var hand in listsorted)
+foreach (var hand in hands)
 {
     bidsSummed += hand.Bid * rank;
     rank++;
