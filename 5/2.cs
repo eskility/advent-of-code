@@ -1,3 +1,4 @@
+//with thanks to https://www.youtube.com/watch?v=NmxHw_bHhGM
 using System.Text.RegularExpressions;
 
 var file = File.ReadAllText("input.txt");
