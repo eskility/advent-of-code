@@ -26,7 +26,7 @@ foreach (var mapData in text.Skip(1))
         maps.Add(new Map(numbers[0], numbers[1], numbers[2]));
     }
 
-    //take each seed and check it against the map
+    //take each seed and check it against each map
     var matches = new List<(long, long)>();
     while (seeds.Count > 0)
     {
