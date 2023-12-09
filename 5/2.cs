@@ -54,7 +54,7 @@ foreach (var mapData in text.Skip(1))
                 // For example in the 79 example with the map that is destination 52 and source 50 and range 48.
                 // 79 has a destination of 81 since we see that the destination is 2 higher than source. 
                 // we calculate this by doing the start of overlap 79 - source 50 + destination 52.
-                //The same goes for the overlap end, which is 93. 93-50+52
+                //The same goes for the overlap end, which is 95. 93-50+52
                 //we now know that the overlap was between 81-95.
                 matches.Add((overlapStart - map.Source + map.Destination, overlapEnd - map.Source + map.Destination));
 
