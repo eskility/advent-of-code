@@ -13,7 +13,7 @@ for (int i = 0; i < inputs.Count; i += 2)
     seeds.Enqueue((inputs[i], inputs[i] + inputs[i + 1]));
 }
 
-//now we just loop every maps, for example the seed to soil map
+//now we just loop every map, for example the seed to soil map
 foreach (var mapData in text.Skip(1))
 {
     var allMaps = mapData.Split("\n");
