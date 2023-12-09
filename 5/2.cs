@@ -21,11 +21,11 @@ foreach (var mapData in text.Skip(1))
         var numbers = Regex.Matches(m, @"\d+").Select(x => long.Parse(x.Value)).ToList();
         map.Enqueue(new Map(numbers[0], numbers[1], numbers[2]));
     }
+
     var matches = new Queue<(long, long)>();
     while (seeds.Count > 0)
     {
         var x = seeds.Dequeue();
-
         long s = x.Item1, e = x.Item2;
         var resultFound = false;
 
@@ -45,7 +45,6 @@ foreach (var mapData in text.Skip(1))
                 {
                     seeds.Enqueue((overlapEnd, e));
                 }
-
                 break;
             }
         }
@@ -55,7 +54,7 @@ foreach (var mapData in text.Skip(1))
     seeds = matches;
 }
 
-Console.WriteLine(seeds.Min());
+Console.WriteLine(seeds.Min().Item1);
 
 class Map(long _destination, long _source, long _range)
 {
