@@ -58,15 +58,18 @@ foreach (var mapData in text.Skip(1))
                 //we now know that the overlap was between 81-95.
                 matches.Add((overlapStart - map.Source + map.Destination, overlapEnd - map.Source + map.Destination));
 
-                //now if the overlap is more than the start of eed range itself
+                //now if the overlap is more than the start of the range itself
                 // we need to add that portion to the queue of elements
-                // to check
+                // to check. This means that if our overlap misses a part of our seeds range, we need to also 
+                // check this range. For example if our overlap started at 90, we would need to make a new seed
+                // to check that is 73-90.
                 if (overlapStart > start)
                 {
                     seeds.Enqueue((start, overlapStart));
                 }
                 //the same goes for if the end of the seed range itself is higher than the overlap. 
-                // Then we need to add that portion to check
+                // Then we need to add that portion to check.
+                //For example, if the overlap ends at 85, we would need to make a ned seed tat is 85-90.
                 if (end > overlapEnd)
                 {
                     seeds.Enqueue((overlapEnd, end));
@@ -75,7 +78,7 @@ foreach (var mapData in text.Skip(1))
                 break;
             }
         }
-        //if there was no overlaps at all we add the entire range. This is exactly like part 1
+        //if there is no overlaps at all we add the entire range. This is exactly like part 1
         // where the rule states that if there is no map, you use the same value as the seed itself.
         if (!resultFound)
             matches.Add((start, end));
@@ -83,7 +86,6 @@ foreach (var mapData in text.Skip(1))
     //since we now have found the new range to search we clear the queue and do the next map.
     // iow, you move from for example seed to soil, clear the queue then add the ranges found to
     // be used against soil to fertilizer map.
-    // fertilizer to the queue 
     seeds.Clear();
     foreach (var x in matches)
         seeds.Enqueue(x);
