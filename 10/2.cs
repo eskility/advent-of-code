@@ -1,9 +1,3 @@
-using System.Data;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Tracing;
-using System.Text;
-
 var file = File.ReadAllText("input.txt");
 var lines = file.Split("\n");
 int startRow = 0, startColumn = 0;
@@ -26,6 +20,10 @@ var visited = new List<(int, int)>();
 var queue = new Queue<(int, int)>();
 queue.Enqueue((startRow, startColumn));
 visited.Add((startRow, startColumn));
+
+
+
+List<char> maybe_s = ['|', '-', 'J', 'L', '7', 'F'];
 
 List<char> upWards = ['S', 'J', 'L', '|'];
 List<char> upwardsReceiver = ['|', '7', 'F'];
