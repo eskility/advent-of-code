@@ -27,10 +27,6 @@ var queue = new Queue<(int, int)>();
 queue.Enqueue((startRow, startColumn));
 visited.Add((startRow, startColumn));
 
-
-
-List<char> maybe_s = ['|', '-', 'J', 'L', '7', 'F'];
-
 List<char> upWards = ['S', 'J', 'L', '|'];
 List<char> upwardsReceiver = ['|', '7', 'F'];
 List<char> downwards = ['S', '|', '7', 'F'];
