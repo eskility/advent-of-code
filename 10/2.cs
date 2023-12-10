@@ -1,5 +1,3 @@
-//I had the correct code for so long, but didn't figure I needed to divide searched by 2.
-//Thanks to https://www.youtube.com/watch?v=r3i3XE9H4uw
 using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
