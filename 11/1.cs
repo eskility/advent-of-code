@@ -17,7 +17,6 @@ for (int column = 0; column < lines[0].Length; column++)
         columns.Add(column);
 }
 
-
 foreach (var line in lines)
 {
     var sb = new StringBuilder();
@@ -32,9 +31,7 @@ foreach (var line in lines)
     }
 }
 
-var queue = new Queue<Node>();
 var listOfNodes = new List<Node>();
-var mapOfNodes = new Dictionary<(int, int), Node>();
 var starCounter = 1;
 for (int row = 0; row < newLines.Count; row++)
 {
@@ -43,86 +40,34 @@ for (int row = 0; row < newLines.Count; row++)
 
         var node = new Node((row, column));
 
-        if (row > 0)
-            node.Connections.Add((row - 1, column));
-        if (column > 1)
-            node.Connections.Add((row, column - 1));
-        if (row < newLines.Count - 1)
-            node.Connections.Add((row + 1, column));
-        if (column < newLines[row].Length - 1)
-            node.Connections.Add((row, column + 1));
-
-        if (newLines[row][column] == '#')
+      if (newLines[row][column] == '#')
         {
             node.Id = starCounter++;
             listOfNodes.Add(node);
         }
-        mapOfNodes.Add(node.Location, node);
+    
     }
 }
 
 var pairs = new List<((int, int), (int, int))>();
-
+var totalsteps = 0;
 foreach (var x in listOfNodes)
 {
     foreach (var y in listOfNodes)
-        if (x != y)
-            pairs.Add((x.Location, y.Location));
-
-}
-
-var pairsFound = new List<(int?, int?)>();
-var totalsteps = 0;
-
-foreach (var pair in pairs)
-{
-    var source = mapOfNodes[pair.Item1];
-    var target = mapOfNodes[pair.Item2];
-    var searched = new HashSet<(int, int)>();
-    var steps = 0;
-    if (!pairsFound.Contains((source.Id, target.Id)) && !pairsFound.Contains((target.Id, source.Id)))
-    {
-        queue.Enqueue(mapOfNodes[pair.Item1]);
-        while (queue.Count > 0)
+        if (x != y && !pairs.Contains((x.Location, y.Location)) && !pairs.Contains((y.Location, x.Location)))
         {
-            var queuesize = queue.Count;
-            for (int i = 0; i < queuesize; i++)
-            {
-                var node = queue.Dequeue();
-
-                if (!searched.Contains(node.Location))
-                {
-                    searched.Add(node.Location);
-                    if (node.Connections.Contains(target.Location))
-                    {
-                        totalsteps += steps + 1;
-                        pairsFound.Add((target.Id, source.Id));
-                        queue.Clear();
-                        break;
-                    }
-
-                    else
-                    {
-                        foreach (var x in node.Connections)
-                        {
-                            if (!searched.Contains(x))
-                                queue.Enqueue(mapOfNodes[x]);
-                        }
-                    }
-                }
-            }
-            steps++;
+            pairs.Add((x.Location, y.Location));
+            totalsteps += Math.Abs(x.Location.Item1 - y.Location.Item1) + Math.Abs(x.Location.Item2 - y.Location.Item2);
         }
-    }
+
 }
+
 Console.WriteLine(totalsteps);
-
-
 
 
 class Node((int, int) _location)
 {
-    public int? Id { get; set; }
+    public int Id { get; set; }
     public (int, int) Location { get; set; } = _location;
-    public List<(int, int)> Connections { get; set; } = [];
+    
 }
