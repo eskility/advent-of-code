@@ -43,16 +43,15 @@ foreach (var x in listOfNodes)
     foreach (var y in listOfNodes)
         if (x != y && !pairs.Contains((x.Location, y.Location)) && !pairs.Contains((y.Location, x.Location)))
         {
-
             var a = Math.Min(x.Location.Item1, y.Location.Item1);
             var d = Math.Max(x.Location.Item2, y.Location.Item2);
             var b = Math.Max(x.Location.Item1, y.Location.Item1);
             var c = Math.Min(x.Location.Item2, y.Location.Item2);
 
-            long e = expandedColumns.Where(x => x > c && x < d).Count();
-            long f = expandedRows.Where(x => x > a && x < b).Count();
+            int e = expandedRows.Where(x => x > a && x < b).Count();
+            int f = expandedColumns.Where(x => x > c && x < d).Count();
 
-            totalsteps += Math.Abs(d - c) + Math.Abs(b - a);
+            totalsteps += Math.Abs(b - a) + Math.Abs(d - c);
             totalsteps += (e * 1000000) - e + (f * 1000000) - f;
             pairs.Add((x.Location, y.Location));
         }
