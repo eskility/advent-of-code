@@ -17,28 +17,23 @@ for (int column = 0; column < lines[0].Length; column++)
         expandedColumns.Add(column);
 }
 
-for (int i = 0; i < lines.Length; i++)
-{
-    if (lines[i].Where(x => x == '.').Count() == lines[i].Length)
-    {
-        expandedRows.Add(i);
-    }
-}
-
 var listOfNodes = new List<Node>();
 var starCounter = 1;
 for (int row = 0; row < lines.Length; row++)
 {
+    var starFound = false;
     for (int column = 0; column < lines[row].Length; column++)
     {
-        var node = new Node((row, column));
-
         if (lines[row][column] == '#')
         {
+            var node = new Node((row, column));
+            starFound = true;
             node.Id = starCounter++;
             listOfNodes.Add(node);
         }
     }
+    if (!starFound)
+        expandedRows.Add(row);
 }
 
 var pairs = new List<((int, int), (int, int))>();
@@ -48,14 +43,16 @@ foreach (var x in listOfNodes)
     foreach (var y in listOfNodes)
         if (x != y && !pairs.Contains((x.Location, y.Location)) && !pairs.Contains((y.Location, x.Location)))
         {
-            var a = Math.Max(x.Location.Item2, y.Location.Item2);
-            var b = Math.Min(x.Location.Item2, y.Location.Item2);
-            var c = Math.Max(x.Location.Item1, y.Location.Item1);
-            var d = Math.Min(x.Location.Item1, y.Location.Item1);
-            long e = expandedColumns.Where(x => x > b && x < a).Count();
-            long f = expandedRows.Where(x => x > d && x < c).Count();
 
-            totalsteps += Math.Abs(a - b) + Math.Abs(c - d);
+            var a = Math.Min(x.Location.Item1, y.Location.Item1);
+            var d = Math.Max(x.Location.Item2, y.Location.Item2);
+            var b = Math.Max(x.Location.Item1, y.Location.Item1);
+            var c = Math.Min(x.Location.Item2, y.Location.Item2);
+
+            long e = expandedColumns.Where(x => x > c && x < d).Count();
+            long f = expandedRows.Where(x => x > a && x < b).Count();
+
+            totalsteps += Math.Abs(d - c) + Math.Abs(b - a);
             totalsteps += (e * 1000000) - e + (f * 1000000) - f;
             pairs.Add((x.Location, y.Location));
         }
