@@ -2,7 +2,6 @@ using System.Data;
 
 var file = File.ReadAllText("input.txt");
 var lines = file.Split("\n");
-var newLines = new List<string>();
 var expandedColumns = new List<int>();
 var expandedRows = new List<int>();
 
@@ -13,7 +12,6 @@ for (int column = 0; column < lines[0].Length; column++)
     {
         if (lines[row][column] != '.')
             emptyColumn = false;
-
     }
     if (emptyColumn)
         expandedColumns.Add(column);
@@ -25,24 +23,21 @@ for (int i = 0; i < lines.Length; i++)
     {
         expandedRows.Add(i);
     }
-    newLines.Add(lines[i]);
 }
 
 var listOfNodes = new List<Node>();
 var starCounter = 1;
-for (int row = 0; row < newLines.Count; row++)
+for (int row = 0; row < lines.Length; row++)
 {
-    for (int column = 0; column < newLines[row].Length; column++)
+    for (int column = 0; column < lines[row].Length; column++)
     {
-
         var node = new Node((row, column));
 
-        if (newLines[row][column] == '#')
+        if (lines[row][column] == '#')
         {
             node.Id = starCounter++;
             listOfNodes.Add(node);
         }
-
     }
 }
 
@@ -59,7 +54,6 @@ foreach (var x in listOfNodes)
             var d = Math.Min(x.Location.Item1, y.Location.Item1);
             long e = expandedColumns.Where(x => x > b && x < a).Count();
             long f = expandedRows.Where(x => x > d && x < c).Count();
-
 
             totalsteps += Math.Abs(a - b) + Math.Abs(c - d);
             totalsteps += (e * 1000000) - e + (f * 1000000) - f;
