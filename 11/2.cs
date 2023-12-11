@@ -44,9 +44,9 @@ foreach (var x in listOfNodes)
         if (x != y && !pairs.Contains((x.Location, y.Location)) && !pairs.Contains((y.Location, x.Location)))
         {
             var a = Math.Min(x.Location.Item1, y.Location.Item1);
-            var d = Math.Max(x.Location.Item2, y.Location.Item2);
             var b = Math.Max(x.Location.Item1, y.Location.Item1);
             var c = Math.Min(x.Location.Item2, y.Location.Item2);
+            var d = Math.Max(x.Location.Item2, y.Location.Item2);
 
             int e = expandedRows.Where(x => x > a && x < b).Count();
             int f = expandedColumns.Where(x => x > c && x < d).Count();
