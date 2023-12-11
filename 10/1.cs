@@ -1,7 +1,5 @@
 //I had the correct code for so long, but didn't figure I needed to divide searched by 2.
 //Thanks to https://www.youtube.com/watch?v=r3i3XE9H4uw
-using System.Data;
-
 var file = File.ReadAllText("input.txt");
 var lines = file.Split("\n");
 int startRow = 0, startColumn = 0;
@@ -23,16 +21,6 @@ for (int r = 0; r < lines.Length; r++)
 var searched = new List<(int, int)>();
 var queue = new Queue<(int, int)>();
 queue.Enqueue((startRow, startColumn));
-searched.Add((startRow,startColumn));
-
-List<char> upWards = ['S', 'J', 'L', '|'];
-List<char> upwardsReceiver = ['|', '7', 'F'];
-List<char> downwards = ['S', '|', '7', 'F'];
-List<char> downwardsReceiver = ['|', 'J', 'L'];
-List<char> left = ['S', '-', 'J', '7'];
-List<char> leftReceiver = ['-', 'L', 'F'];
-List<char> right = ['S', '-', 'L', 'F'];
-List<char> rightReceiver = ['-', 'J', '7'];
 
 while (queue.Count > 0)
 {
@@ -40,30 +28,67 @@ while (queue.Count > 0)
     var row = node.Item1;
     var column = node.Item2;
 
-    if (row != 0 && upWards.Contains(lines[row][column]) && upwardsReceiver.Contains(lines[row - 1][column])
-  && !searched.Contains((row - 1, column)))
+    if (!searched.Contains(node) && row > 0 && row < lines.Length && column > 0 && column < lines[0].Length)
     {
-        queue.Enqueue((row - 1, column));
-        searched.Add((row - 1, column));
+        searched.Add(node);
+        if (lines[row][column] == 'S')
+        {
+            searched.Add(node);
+            queue.Enqueue((row - 1, column));
+            queue.Enqueue((row + 1, column));
+            queue.Enqueue((row, column + 1));
+            queue.Enqueue((row, column - 1));
+
+        }
+        else
+        {
+            var c = lines[row][column];
+            var newColumn = GetNextNodes(c, (row, column));
+            queue.Enqueue(newColumn.Item1);
+            queue.Enqueue(newColumn.Item2);
+
+
+        }
     }
-    if (row < lines.Length - 1 && downwards.Contains(lines[row][column]) && downwardsReceiver.Contains(lines[row + 1][column])
-  && !searched.Contains((row + 1, column)))
+
+}
+
+((int, int), (int, int)) GetNextNodes(char c, (int, int) current)
+{
+    var row = current.Item1;
+    var column = current.Item2;
+    var result = ((0, 0), (0, 0));
+    if (c == '|')
     {
-        queue.Enqueue((row + 1, column));
-        searched.Add((row + 1, column));
+        result = ((row + 1, column), (row - 1, column));
     }
-    if (column > 0 && left.Contains(lines[row][column]) && leftReceiver.Contains(lines[row][column - 1])
-      && !searched.Contains((row, column - 1)))
+    if (c == '-')
     {
-        queue.Enqueue((row, column - 1));
-        searched.Add((row, column - 1));
+
+        result = ((row, column + 1), (row, column - 1));
     }
-    if (column < lines[row].Length - 1 && right.Contains(lines[row][column]) && rightReceiver.Contains(lines[row][column + 1])
-      && !searched.Contains((row, column + 1)))
+    if (c == 'L')
     {
-        queue.Enqueue((row, column + 1));
-        searched.Add((row, column + 1));
+
+        result = ((row - 1, column), (row, column + 1));
     }
+    if (c == 'J')
+    {
+
+        result = ((row - 1, column), (row, column - 1));
+    }
+    if (c == '7')
+    {
+
+        result = ((row + 1, column), (row, column - 1));
+    }
+    if (c == 'F')
+    {
+
+        result = ((row + 1, column), (row, column + 1));
+    }
+
+    return result;
 }
 
 Console.WriteLine(searched.Count / 2);
