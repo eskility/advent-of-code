@@ -38,7 +38,6 @@ while (queue.Count > 0)
             queue.Enqueue((row + 1, column));
             queue.Enqueue((row, column + 1));
             queue.Enqueue((row, column - 1));
-
         }
         else
         {
@@ -46,8 +45,6 @@ while (queue.Count > 0)
             var newColumn = GetNextNodes(c, (row, column));
             queue.Enqueue(newColumn.Item1);
             queue.Enqueue(newColumn.Item2);
-
-
         }
     }
 
