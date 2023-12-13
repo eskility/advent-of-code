@@ -21,7 +21,7 @@ for (int i = 0; i < input.Length; i++)
     }
 
     sum += FindReflection(rows) * 100;
-    sum += FindReflection(columns.ToArray());
+    sum += FindReflection([.. columns]);
 }
 
 Console.WriteLine(sum);
