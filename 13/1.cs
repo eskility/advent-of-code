@@ -44,7 +44,7 @@ static int FindReflection(string[] data, bool horizontal)
             }
             if (reflection)
                 if (horizontal)
-                    return ((x + 1) * 100);
+                    return (x + 1) * 100;
                 else
                     return x + 1;
         }
