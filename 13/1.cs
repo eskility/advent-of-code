@@ -7,7 +7,7 @@ var sum = 0;
 for (int i = 0; i < input.Length; i++)
 {
     var rows = input[i].Split("\n");
-    var columns = new List<string>();
+    List<string> columns = [];
 
     for (int column = 0; column < rows[0].Length; column++)
     {
@@ -19,14 +19,14 @@ for (int i = 0; i < input.Length; i++)
         }
         columns.Add(sb.ToString());
     }
-    
-    sum += FindReflection(columns.ToArray(), false);
-    sum += FindReflection(rows, true);
+
+    sum += FindReflection(rows) * 100;
+    sum += FindReflection([.. columns]);
 }
 
 Console.WriteLine(sum);
 
-static int FindReflection(string[] data, bool horizontal)
+static int FindReflection(string[] data)
 {
     for (int x = 0; x < data.Length - 1; x++)
     {
@@ -44,10 +44,7 @@ static int FindReflection(string[] data, bool horizontal)
                 y--; z++;
             }
             if (reflection)
-                if (horizontal)
-                    return (x + 1) * 100;
-                else
-                    return x + 1;
+                return x + 1;
         }
     }
     return 0;
