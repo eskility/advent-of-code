@@ -19,10 +19,11 @@ for (int i = 0; i < input.Length; i++)
         }
         columns.Add(sb.ToString());
     }
+    
     sum += FindReflection(columns.ToArray(), false);
     sum += FindReflection(rows, true);
-
 }
+
 Console.WriteLine(sum);
 
 static int FindReflection(string[] data, bool horizontal)
