@@ -45,7 +45,7 @@ static int FindReflection(string[] data, bool horizontal)
         if (differences == 1)
         {
             if (horizontal)
-                return ((x + 1) * 100);
+                return (x + 1) * 100;
             else
                 return x + 1;
         }
