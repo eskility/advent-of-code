@@ -1,4 +1,3 @@
-
 using System.Text;
 
 var file = File.ReadAllText("input.txt");
