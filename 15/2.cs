@@ -29,6 +29,7 @@ foreach (var x in listOfHashes)
 }
 
 var sum = 0;
+
 foreach (var box in boxes)
 {
     for (int i = 0; i < box.Lenses.Count; i++)
@@ -74,7 +75,6 @@ class Box(int _id)
         var updated = false;
 
         for (int i = 0; i < Lenses.Count; i++)
-
             if (Lenses[i].Id == id)
             {
                 Lenses[i].Strength = strength;
