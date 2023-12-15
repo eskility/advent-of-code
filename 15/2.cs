@@ -50,12 +50,12 @@ static int StringToHash(string s)
     }
     return sum;
 }
+
 class Lens(string _id, int _strength)
 {
     public string Id { get; set; } = _id;
     public int Strength { get; set; } = _strength;
 }
-
 
 class Box(int _id)
 {
