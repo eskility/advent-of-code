@@ -1,5 +1,5 @@
 var listOfHashes = File.ReadAllText("input.txt").Split(",");
-Box[] boxes = new Box[256];
+var boxes = new Box[256];
 
 for (int i = 0; i < 256; i++)
 {
