@@ -14,16 +14,7 @@ foreach (var x in listOfHashes)
     else
         label = x.Split('-')[0];
 
-    var boxId = 0;
-
-    for (int i = 0; i < label.Length; i++)
-    {
-        boxId += label[i];
-        boxId *= 17;
-        boxId %= 256;
-    }
-
-    var box = boxes[boxId];
+    var box = boxes[StringToHash(label)];
 
     if (x.Contains('-'))
     {
@@ -45,12 +36,27 @@ foreach (var box in boxes)
         sum += (box.Id + 1) * (i + 1) * box.Lenses[i].Strength;
     }
 }
+
 Console.WriteLine(sum);
+
+static int StringToHash(string s)
+{
+    var sum = 0;
+    for (int i = 0; i < s.Length; i++)
+    {
+        sum += s[i];
+        sum *= 17;
+        sum %= 256;
+    }
+    return sum;
+}
 class Lens(string _id, int _strength)
 {
     public string Id { get; set; } = _id;
     public int Strength { get; set; } = _strength;
 }
+
+
 class Box(int _id)
 {
     public int Id { get; set; } = _id;
