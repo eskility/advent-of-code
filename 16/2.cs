@@ -40,11 +40,11 @@ static void Scan((int, int) location, List<((int, int), Direction)> traveled, Li
             energized.Add(location);
 
         if (data[location.Item1][location.Item2] == '.' && direction == Direction.North
-             || data[location.Item1][location.Item2] == '|' && direction == Direction.North
-             || data[location.Item1][location.Item2] == '|' && direction == Direction.West
-             || data[location.Item1][location.Item2] == '|' && direction == Direction.East
-             || data[location.Item1][location.Item2] == '\\' && direction == Direction.West
-             || data[location.Item1][location.Item2] == '/' && direction == Direction.East)
+            || data[location.Item1][location.Item2] == '|' && direction == Direction.North
+            || data[location.Item1][location.Item2] == '|' && direction == Direction.West
+            || data[location.Item1][location.Item2] == '|' && direction == Direction.East
+            || data[location.Item1][location.Item2] == '\\' && direction == Direction.West
+            || data[location.Item1][location.Item2] == '/' && direction == Direction.East)
                 {Scan((location.Item1 - 1, location.Item2), traveled, energized, Direction.North, data);}
 
         if (data[location.Item1][location.Item2] == '.' && direction == Direction.South
