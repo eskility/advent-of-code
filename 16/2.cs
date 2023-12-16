@@ -2,23 +2,29 @@ var data = File.ReadAllText("input.txt").Split("\n");
 
 var result = new List<int>();
 var startingPoints = new List<(int, int)>();
+var traveled = new List<((int, int), Direction)>();
+var energized = new List<(int, int)>();
 
 for (int row = 0; row < data.Length; row++)
 {
-    startingPoints.Add((row, 0));
-    startingPoints.Add((row, data[0].Length - 1));
+    traveled.Clear();
+    energized.Clear();
+    Scan((row, 0), traveled, energized, Direction.East, data);
+    result.Add(energized.Count);
+    traveled.Clear();
+    energized.Clear();
+    Scan((row, data[row].Length-1), traveled, energized, Direction.West, data);
+    result.Add(energized.Count);
 }
 for (int column = 0; column < data[0].Length; column++)
 {
-    startingPoints.Add((0, column));
-    startingPoints.Add((data.Length - 1, column));
-}
-
-foreach (var point in startingPoints)
-{
-    var traveled = new List<((int, int), Direction)>();
-    var energized = new List<(int, int)>();
-    Scan((point), traveled, energized, Direction.East, data);
+    traveled.Clear();
+    energized.Clear();
+    Scan((0, column), traveled, energized, Direction.South, data);
+    result.Add(energized.Count);
+    traveled.Clear();
+    energized.Clear();
+    Scan((data.Length - 1, column), traveled, energized, Direction.North, data);
     result.Add(energized.Count);
 }
 
@@ -34,36 +40,36 @@ static void Scan((int, int) location, List<((int, int), Direction)> traveled, Li
             energized.Add(location);
 
         if (data[location.Item1][location.Item2] == '.' && direction == Direction.North
-          || data[location.Item1][location.Item2] == '|' && direction == Direction.North
+             || data[location.Item1][location.Item2] == '|' && direction == Direction.North
              || data[location.Item1][location.Item2] == '|' && direction == Direction.West
              || data[location.Item1][location.Item2] == '|' && direction == Direction.East
-          || data[location.Item1][location.Item2] == '\\' && direction == Direction.West
-          || data[location.Item1][location.Item2] == '/' && direction == Direction.East)
-            Scan((location.Item1 - 1, location.Item2), traveled, energized, Direction.North, data);
+             || data[location.Item1][location.Item2] == '\\' && direction == Direction.West
+             || data[location.Item1][location.Item2] == '/' && direction == Direction.East)
+                {Scan((location.Item1 - 1, location.Item2), traveled, energized, Direction.North, data);}
 
         if (data[location.Item1][location.Item2] == '.' && direction == Direction.South
             || data[location.Item1][location.Item2] == '|' && direction == Direction.South
-               || data[location.Item1][location.Item2] == '|' && direction == Direction.West
-               || data[location.Item1][location.Item2] == '|' && direction == Direction.East
+            || data[location.Item1][location.Item2] == '|' && direction == Direction.West
+            || data[location.Item1][location.Item2] == '|' && direction == Direction.East
             || data[location.Item1][location.Item2] == '\\' && direction == Direction.East
             || data[location.Item1][location.Item2] == '/' && direction == Direction.West)
-            Scan((location.Item1 + 1, location.Item2), traveled, energized, Direction.South, data);
+                {Scan((location.Item1 + 1, location.Item2), traveled, energized, Direction.South, data);}
 
         if (data[location.Item1][location.Item2] == '.' && direction == Direction.West
-                || data[location.Item1][location.Item2] == '-' && direction == Direction.North
-                   || data[location.Item1][location.Item2] == '-' && direction == Direction.South
-                   || data[location.Item1][location.Item2] == '-' && direction == Direction.West
-                || data[location.Item1][location.Item2] == '\\' && direction == Direction.North
-                || data[location.Item1][location.Item2] == '/' && direction == Direction.South)
-            Scan((location.Item1, location.Item2 - 1), traveled, energized, Direction.West, data);
+            || data[location.Item1][location.Item2] == '-' && direction == Direction.North
+            || data[location.Item1][location.Item2] == '-' && direction == Direction.South
+            || data[location.Item1][location.Item2] == '-' && direction == Direction.West
+            || data[location.Item1][location.Item2] == '\\' && direction == Direction.North
+            || data[location.Item1][location.Item2] == '/' && direction == Direction.South)
+                {Scan((location.Item1, location.Item2 - 1), traveled, energized, Direction.West, data);}
 
         if (data[location.Item1][location.Item2] == '.' && direction == Direction.East
             || data[location.Item1][location.Item2] == '-' && direction == Direction.North
-               || data[location.Item1][location.Item2] == '-' && direction == Direction.South
-               || data[location.Item1][location.Item2] == '-' && direction == Direction.East
+            || data[location.Item1][location.Item2] == '-' && direction == Direction.South
+            || data[location.Item1][location.Item2] == '-' && direction == Direction.East
             || data[location.Item1][location.Item2] == '\\' && direction == Direction.South
             || data[location.Item1][location.Item2] == '/' && direction == Direction.North)
-            Scan((location.Item1, location.Item2 + 1), traveled, energized, Direction.East, data);
+                {Scan((location.Item1, location.Item2 + 1), traveled, energized, Direction.East, data);}
     }
 }
 
