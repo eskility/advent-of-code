@@ -16,38 +16,39 @@ static void Scan((int, int) location, List<((int, int), Direction)> traveled, Li
             energized.Add(location);
 
         if (data[location.Item1][location.Item2] == '.' && direction == Direction.North
-          || data[location.Item1][location.Item2] == '|' && direction == Direction.North
+             || data[location.Item1][location.Item2] == '|' && direction == Direction.North
              || data[location.Item1][location.Item2] == '|' && direction == Direction.West
              || data[location.Item1][location.Item2] == '|' && direction == Direction.East
-          || data[location.Item1][location.Item2] == '\\' && direction == Direction.West
-          || data[location.Item1][location.Item2] == '/' && direction == Direction.East)
-            Scan((location.Item1 - 1, location.Item2), traveled, energized, Direction.North, data);
+             || data[location.Item1][location.Item2] == '\\' && direction == Direction.West
+             || data[location.Item1][location.Item2] == '/' && direction == Direction.East)
+                {Scan((location.Item1 - 1, location.Item2), traveled, energized, Direction.North, data);}
 
         if (data[location.Item1][location.Item2] == '.' && direction == Direction.South
             || data[location.Item1][location.Item2] == '|' && direction == Direction.South
-               || data[location.Item1][location.Item2] == '|' && direction == Direction.West
-               || data[location.Item1][location.Item2] == '|' && direction == Direction.East
+            || data[location.Item1][location.Item2] == '|' && direction == Direction.West
+            || data[location.Item1][location.Item2] == '|' && direction == Direction.East
             || data[location.Item1][location.Item2] == '\\' && direction == Direction.East
             || data[location.Item1][location.Item2] == '/' && direction == Direction.West)
-            Scan((location.Item1 + 1, location.Item2), traveled, energized, Direction.South, data);
+                {Scan((location.Item1 + 1, location.Item2), traveled, energized, Direction.South, data);}
 
         if (data[location.Item1][location.Item2] == '.' && direction == Direction.West
-                || data[location.Item1][location.Item2] == '-' && direction == Direction.North
-                   || data[location.Item1][location.Item2] == '-' && direction == Direction.South
-                   || data[location.Item1][location.Item2] == '-' && direction == Direction.West
-                || data[location.Item1][location.Item2] == '\\' && direction == Direction.North
-                || data[location.Item1][location.Item2] == '/' && direction == Direction.South)
-            Scan((location.Item1, location.Item2 - 1), traveled, energized, Direction.West, data);
+            || data[location.Item1][location.Item2] == '-' && direction == Direction.North
+            || data[location.Item1][location.Item2] == '-' && direction == Direction.South
+            || data[location.Item1][location.Item2] == '-' && direction == Direction.West
+            || data[location.Item1][location.Item2] == '\\' && direction == Direction.North
+            || data[location.Item1][location.Item2] == '/' && direction == Direction.South)
+                {Scan((location.Item1, location.Item2 - 1), traveled, energized, Direction.West, data);}
 
         if (data[location.Item1][location.Item2] == '.' && direction == Direction.East
             || data[location.Item1][location.Item2] == '-' && direction == Direction.North
-               || data[location.Item1][location.Item2] == '-' && direction == Direction.South
-               || data[location.Item1][location.Item2] == '-' && direction == Direction.East
+            || data[location.Item1][location.Item2] == '-' && direction == Direction.South
+            || data[location.Item1][location.Item2] == '-' && direction == Direction.East
             || data[location.Item1][location.Item2] == '\\' && direction == Direction.South
             || data[location.Item1][location.Item2] == '/' && direction == Direction.North)
-            Scan((location.Item1, location.Item2 + 1), traveled, energized, Direction.East, data);
+                {Scan((location.Item1, location.Item2 + 1), traveled, energized, Direction.East, data);}
     }
 }
+
 
 enum Direction
 {
