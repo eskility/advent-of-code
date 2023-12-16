@@ -6,133 +6,75 @@ Scan((0, 0), traveled, energized, Direction.East, data);
 
 Console.WriteLine(energized.Count);
 
-
-void Scan((int, int) location, List<((int, int), Direction)> traveled, List<(int, int)> energized, Direction direction, string[] data)
+static void Scan((int, int) location, List<((int, int), Direction)> traveled, List<(int, int)> energized, Direction direction, string[] data)
 {
 
-    if (!traveled.Contains(((location.Item1, location.Item2), direction)) && location.Item1>= 0 && location.Item2 >=0 
-    && location.Item1 < data.Length  && location.Item2! < data[location.Item1].Length)
+    if (!traveled.Contains(((location.Item1, location.Item2), direction)) && location.Item1 >= 0 && location.Item2 >= 0
+    && location.Item1 < data.Length && location.Item2! < data[location.Item1].Length)
     {
         traveled.Add(((location.Item1, location.Item2), direction));
         if (!energized.Contains(location))
             energized.Add(location);
 
-        if (direction == Direction.North)
+        if (data[location.Item1][location.Item2] == '.')
         {
-
-            if (data[location.Item1][location.Item2] == '.')
-            {
+            if (direction == Direction.North)
                 Scan((location.Item1 - 1, location.Item2), traveled, energized, Direction.North, data);
-            }
-            else if (data[location.Item1][location.Item2] == '-')
-            {
-
+            else if (direction == Direction.South)
+                Scan((location.Item1 + 1, location.Item2), traveled, energized, Direction.South, data);
+            else if (direction == Direction.West)
                 Scan((location.Item1, location.Item2 - 1), traveled, energized, Direction.West, data);
+            else if (direction == Direction.East)
                 Scan((location.Item1, location.Item2 + 1), traveled, energized, Direction.East, data);
-            }
-            else if (data[location.Item1][location.Item2] == '|')
-            {
-
-                Scan((location.Item1 - 1, location.Item2), traveled, energized, Direction.North, data);
-            }
-            else if (data[location.Item1][location.Item2] == '\\')
-            {
-                Scan((location.Item1, location.Item2 - 1), traveled, energized, Direction.West, data);
-            }
-            else if (data[location.Item1][location.Item2] == '/')
-            {
-                Scan((location.Item1, location.Item2 + 1), traveled, energized, Direction.East, data);
-            }
         }
-
-        else if (direction == Direction.South)
+        else if (data[location.Item1][location.Item2] == '-')
         {
-            if (data[location.Item1][location.Item2] == '.')
-            {
-                Scan((location.Item1 + 1, location.Item2), traveled, energized, Direction.South, data);
-            }
-            else if (data[location.Item1][location.Item2] == '-')
+            if (direction == Direction.North || direction == Direction.South)
             {
                 Scan((location.Item1, location.Item2 - 1), traveled, energized, Direction.West, data);
                 Scan((location.Item1, location.Item2 + 1), traveled, energized, Direction.East, data);
             }
-            else if (data[location.Item1][location.Item2] == '|')
-            {
-
-                Scan((location.Item1 + 1, location.Item2), traveled, energized, Direction.South, data);
-            }
-            else if (data[location.Item1][location.Item2] == '\\')
-            {
-
-                Scan((location.Item1, location.Item2 + 1), traveled, energized, Direction.East, data);
-
-
-            }
-            else if (data[location.Item1][location.Item2] == '/')
-            {
-
+            else if (direction == Direction.West)
                 Scan((location.Item1, location.Item2 - 1), traveled, energized, Direction.West, data);
-            }
+            else if (direction == Direction.East)
+                Scan((location.Item1, location.Item2 + 1), traveled, energized, Direction.East, data);
         }
-
-        else if (direction == Direction.East)
+        else if (data[location.Item1][location.Item2] == '|')
         {
-
-            if (data[location.Item1][location.Item2] == '.')
-            {
-                Scan((location.Item1, location.Item2 + 1), traveled, energized, Direction.East, data);
-            }
-            else if (data[location.Item1][location.Item2] == '-')
-            {
-                Scan((location.Item1, location.Item2 + 1), traveled, energized, Direction.East, data);
-            }
-            else if (data[location.Item1][location.Item2] == '|')
-            {
-                Scan((location.Item1 + 1, location.Item2), traveled, energized, Direction.South, data);
-                Scan((location.Item1 - 1, location.Item2), traveled, energized, Direction.North, data);
-            }
-            else if (data[location.Item1][location.Item2] == '\\')
-            {
-
-                Scan((location.Item1 + 1, location.Item2), traveled, energized, Direction.South, data);
-            }
-            else if (data[location.Item1][location.Item2] == '/')
+            if (direction == Direction.West || direction == Direction.East)
             {
                 Scan((location.Item1 - 1, location.Item2), traveled, energized, Direction.North, data);
+                Scan((location.Item1 + 1, location.Item2), traveled, energized, Direction.South, data);
             }
+            else if (direction == Direction.North)
+                Scan((location.Item1 - 1, location.Item2), traveled, energized, Direction.North, data);
+            else if (direction == Direction.South)
+                Scan((location.Item1 + 1, location.Item2), traveled, energized, Direction.South, data);
         }
-
-        else if (direction == Direction.West)
+        else if (data[location.Item1][location.Item2] == '\\')
         {
-            if (data[location.Item1][location.Item2] == '.')
-            {
+            if (direction == Direction.North)
                 Scan((location.Item1, location.Item2 - 1), traveled, energized, Direction.West, data);
-            }
-            else if (data[location.Item1][location.Item2] == '-')
-            {
-                Scan((location.Item1, location.Item2 - 1), traveled, energized, Direction.West, data);
-            }
-            else if (data[location.Item1][location.Item2] == '|')
-            {
-                Scan((location.Item1 + 1, location.Item2), traveled, energized, Direction.South, data);
+            else if (direction == Direction.South)
+                Scan((location.Item1, location.Item2 + 1), traveled, energized, Direction.East, data);
+            else if (direction == Direction.West)
                 Scan((location.Item1 - 1, location.Item2), traveled, energized, Direction.North, data);
-
-            }
-            else if (data[location.Item1][location.Item2] == '\\')
-            {
-                Scan((location.Item1 - 1, location.Item2), traveled, energized, Direction.North, data);
-            }
-            else if (data[location.Item1][location.Item2] == '/')
-            {
+            else if (direction == Direction.East)
                 Scan((location.Item1 + 1, location.Item2), traveled, energized, Direction.South, data);
-            }
-
         }
-        
+        else if (data[location.Item1][location.Item2] == '/')
+        {
+            if (direction == Direction.North)
+                Scan((location.Item1, location.Item2 + 1), traveled, energized, Direction.East, data);
+            else if (direction == Direction.South)
+                Scan((location.Item1, location.Item2 - 1), traveled, energized, Direction.West, data);
+            else if (direction == Direction.East)
+                Scan((location.Item1 - 1, location.Item2), traveled, energized, Direction.North, data);
+            else if (direction == Direction.West)
+                Scan((location.Item1 + 1, location.Item2), traveled, energized, Direction.South, data);
+        }
     }
 }
-
-
 
 enum Direction
 {
