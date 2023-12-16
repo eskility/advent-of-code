@@ -72,7 +72,6 @@ static void Scan(int x, int y, List<((int, int), Direction)> traveled, List<(int
     }
 }
 
-
 enum Direction
 {
     North, South, West, East
