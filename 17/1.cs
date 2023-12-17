@@ -10,7 +10,7 @@ for (int row = 0; row < data.Length; row++)
     }
 }
 
-var seen = new HashSet<(int, int, int, int, int, int)>();
+var seen = new HashSet<(int, int, int, int, int)>();
 var pq = new PriorityQueue<(int, int, int, int, int, int), int>();
 pq.Enqueue((0, 0, 0, 0, 0, 0), 0);
 
@@ -32,10 +32,10 @@ while (pq.Count > 0)
     }
 
 
-    if (seen.Contains(node))
+    if (seen.Contains((node.Item2, node.Item3, node.Item4, node.Item5, node.Item6)))
         continue;
 
-    seen.Add(node);
+    seen.Add((node.Item2, node.Item3, node.Item4, node.Item5, node.Item6));
 
     if (n < 3 && (dr, dc) != (0, 0))
     {
