@@ -28,6 +28,9 @@ foreach (var line in data)
 var n = list.Count;
 var sum = 0;
 
+
+//using shoelace and pick's theorem. Need to read more about these.
+
 for (int i = 0; i < n - 1; i++)
 {
     sum += list[i].Item1 * list[i + 1].Item2 - list[i + 1].Item1 * list[i].Item2;
