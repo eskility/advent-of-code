@@ -1,5 +1,7 @@
 //1319259408
 
+using System.Configuration.Assemblies;
+
 var data = File.ReadAllText("input.txt").Split("\n");
 var modules = new Dictionary<string, IModule>();
 foreach (var line in data)
@@ -30,7 +32,16 @@ foreach (Conjuction conjuction in modules.Where(x => x.Value is Conjuction).Sele
 }
 
 var queue = new Queue<Pulse>();
-long counter = 0;
+int counter = 0;
+
+var feed = modules.Where(x => x.Value.Destinations.Contains("rx")).First().Value;
+
+var cycleLengths = new Dictionary<string, int>();
+var seen = new Dictionary<string, int>();
+foreach (var module in modules.Where(x => x.Value.Destinations.Contains(feed.Name)))
+{
+    seen.Add(module.Value.Name, 0);
+}
 
 var found = false;
 while (!found)
@@ -40,13 +51,27 @@ while (!found)
     while (queue.Count > 0)
     {
         var pulse = queue.Dequeue();
-        if (pulse.Sender.Destinations.Contains("rx") && !pulse.HighPulse)
-        {
 
-            found = true;
-        }
         if (pulse.Target != null)
         {
+            if (pulse.Target.Name == feed.Name && pulse.HighPulse)
+            {
+                if (!seen.ContainsKey(pulse.Sender.Name))
+                {
+                    seen.Add(pulse.Sender.Name, 0);
+                }
+                seen[pulse.Sender.Name]++;
+                if (!cycleLengths.ContainsKey(pulse.Sender.Name))
+                {
+                    cycleLengths.Add(pulse.Sender.Name, counter);
+                }
+                       
+                if (seen.All(x => x.Value > 0))
+                {
+                    Console.WriteLine(Lcm(cycleLengths.Values.Select(x => long.Parse(x.ToString())).ToArray()));
+                    found = true;
+                }
+            }
             var newPulses = pulse.Target.ReceivePulse(pulse.HighPulse, pulse.Sender, modules);
             foreach (var p in newPulses)
             {
@@ -54,9 +79,26 @@ while (!found)
             }
         }
     }
-
 }
-Console.WriteLine(counter);
+
+
+//gcd and lcd code from https://www.w3resource.com/csharp-exercises/math/csharp-math-exercise-20.php
+static long Gcd(long n1, long n2)
+{
+    if (n2 == 0)
+    {
+        return n1;
+    }
+    else
+    {
+        return Gcd(n2, n1 % n2);
+    }
+}
+
+static long Lcm(long[] numbers)
+{
+    return numbers.Aggregate((S, val) => S * val / Gcd(S, val));
+}
 
 class Pulse(IModule _sender, IModule _target, bool _highPulse)
 {
@@ -173,3 +215,4 @@ class BroadCaster(string _name) : IModule
         return list;
     }
 }
+
