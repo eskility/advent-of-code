@@ -42,14 +42,14 @@ while (queue.Count > 0 && counter <= 64)
 
             foreach (var direction in directions)
             {
-                if (direction.Item1 >= 0 && direction.Item2 >= 0 && direction.Item1 < data.Length && direction.Item2 < data[0].Length
-                 && data[direction.Item1][direction.Item2] == '.' || data[direction.Item1][direction.Item2] == 'S')
-                {
-                    if (!steps.ContainsKey(direction))
-                        steps.Add(direction, 0);
-                    steps[direction] = steps[element] + 1;
-                    queue.Enqueue(direction);
-                }
+                if (direction.Item1 >= 0 && direction.Item2 >= 0 && direction.Item1 < data.Length && direction.Item2 < data[0].Length)
+                    if (data[direction.Item1][direction.Item2] == '.' || data[direction.Item1][direction.Item2] == 'S')
+                    {
+                        if (!steps.ContainsKey(direction))
+                            steps.Add(direction, 0);
+                        steps[direction] = steps[element] + 1;
+                        queue.Enqueue(direction);
+                    }
             }
         }
     }
