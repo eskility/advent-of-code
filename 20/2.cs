@@ -1,7 +1,5 @@
-//1319259408
-
-using System.Configuration.Assemblies;
-
+//another LCM AOC....
+//Learned the assumptions from https://www.youtube.com/watch?v=lxm6i21O83k
 var data = File.ReadAllText("input.txt").Split("\n");
 var modules = new Dictionary<string, IModule>();
 foreach (var line in data)
