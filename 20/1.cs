@@ -1,6 +1,3 @@
-using System.Runtime;
-using System.Security.Cryptography.X509Certificates;
-
 var data = File.ReadAllText("input.txt").Split("\n");
 var modules = new Dictionary<string, IModule>();
 foreach (var line in data)
@@ -22,42 +19,30 @@ foreach (var line in data)
     modules.Add(module.Name, module);
 }
 
+foreach (Conjuction conjuction in modules.Where(x => x.Value is Conjuction).Select(x => x.Value))
+{
+    foreach (var module in modules.Where(x => x.Value.Destinations.Contains(conjuction.Name)))
+    {
+        conjuction.Memory.Add(module.Value.Name, false);
+    }
+}
+
 var queue = new Queue<Pulse>();
 var sumLow = 0;
 var sumHigh = 0;
 
-foreach (var m in modules.Where(x => x.Value is Conjuction))
-{
-    foreach (var x in modules)
-    {
-        if (x.Value.Destinations.Contains(m.Value.Name))
-        {
-            Conjuction z = (Conjuction)m.Value;
-            z.Memory.Add(x.Value.Name, false);
-        }
-    }
-}
-
 for (int i = 0; i < 1000; i++)
 {
-
-
     queue.Enqueue(new Pulse(modules["broadcaster"], modules["broadcaster"], false));
 
     while (queue.Count > 0)
     {
-
         var pulse = queue.Dequeue();
 
-
-
         if (pulse.HighPulse)
-        { sumHigh++; }
+            sumHigh++;
         else
-        {
             sumLow++;
-        }
-
 
         if (pulse.Target != null)
         {
@@ -67,13 +52,9 @@ for (int i = 0; i < 1000; i++)
                 queue.Enqueue(p);
             }
         }
-
     }
 }
 Console.WriteLine(sumLow * sumHigh);
-
-
-
 
 class Pulse(IModule _sender, IModule _target, bool _highPulse)
 {
@@ -85,9 +66,7 @@ class Pulse(IModule _sender, IModule _target, bool _highPulse)
 interface IModule
 {
     public string Name { get; set; }
-
     public List<string> Destinations { get; set; }
-
     List<Pulse> ReceivePulse(bool highPulse, IModule sender, Dictionary<string, IModule> modules);
 }
 
@@ -103,7 +82,6 @@ class Conjuction(string _name) : IModule
 
         Memory[sender.Name] = highPulse;
 
-
         if (Memory.Where(x => x.Value == true).Count() == Memory.Count)
         {
             foreach (var receiver in Destinations)
@@ -111,9 +89,8 @@ class Conjuction(string _name) : IModule
                 if (modules.ContainsKey(receiver))
                     list.Add(new Pulse(this, modules[receiver], false));
                 else
-                {
                     list.Add(new Pulse(this, null, false));
-                }
+
             }
         }
         else
@@ -124,16 +101,14 @@ class Conjuction(string _name) : IModule
                 if (modules.ContainsKey(receiver))
                     list.Add(new Pulse(this, modules[receiver], true));
                 else
-                {
                     list.Add(new Pulse(this, null, true));
-                }
+
             }
 
         }
 
         return list;
     }
-
 
 }
 
@@ -155,9 +130,8 @@ class FlipFlop(string _name) : IModule
                 if (modules.ContainsKey(receiver))
                     list.Add(new Pulse(this, modules[receiver], true));
                 else
-                {
                     list.Add(new Pulse(this, null, true));
-                }
+
             }
         }
         else if (State == true && !highPulse)
@@ -169,12 +143,10 @@ class FlipFlop(string _name) : IModule
                 if (modules.ContainsKey(receiver))
                     list.Add(new Pulse(this, modules[receiver], false));
                 else
-                {
                     list.Add(new Pulse(this, null, false));
-                }
+
             }
         }
-
         return list;
     }
 
@@ -194,13 +166,8 @@ class BroadCaster(string _name) : IModule
             if (modules.ContainsKey(receiver))
                 list.Add(new Pulse(this, modules[receiver], highPulse));
             else
-            {
                 list.Add(new Pulse(this, null, highPulse));
-            }
         }
         return list;
     }
-
 }
-
-
