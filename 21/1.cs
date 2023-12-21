@@ -36,7 +36,8 @@ while (queue.Count > 0 && counter <= 64)
 
             var directions = new List<(int, int)>
             {
-                (element.Item1-1,element.Item2), (element.Item1+1,element.Item2), (element.Item1,element.Item2+1), (element.Item1,element.Item2-1)
+                (element.Item1-1,element.Item2), (element.Item1+1,element.Item2),
+                (element.Item1,element.Item2+1), (element.Item1,element.Item2-1)
             };
 
             foreach (var direction in directions)
