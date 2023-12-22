@@ -10,26 +10,22 @@ for (int row = 0; row < data.Length; row++)
     }
 }
 
-var steps = new Dictionary<(int, int), int>
-{
-    { startIndex, 0 }
-};
 Queue<(int, int)> queue = [];
 HashSet<(int, int)> searched = [];
 HashSet<(int, int)> valid = [];
 
 queue.Enqueue(startIndex);
-var counter = 0;
-while (queue.Count > 0 && counter <= 64)
+var steps = 0;
+while (queue.Count > 0 && steps <= 64)
 {
     var queuesize = queue.Count;
-    counter++;
+
     for (int i = 0; i < queuesize; i++)
     {
         var element = queue.Dequeue();
         if (!searched.Contains(element))
         {
-            if (steps[element] % 2 == 0)
+            if (steps % 2 == 0)
                 valid.Add(element);
 
             searched.Add(element);
@@ -45,14 +41,12 @@ while (queue.Count > 0 && counter <= 64)
                 if (direction.Item1 >= 0 && direction.Item2 >= 0 && direction.Item1 < data.Length && direction.Item2 < data[0].Length)
                     if (data[direction.Item1][direction.Item2] == '.' || data[direction.Item1][direction.Item2] == 'S')
                     {
-                        if (!steps.ContainsKey(direction))
-                            steps.Add(direction, 0);
-                        steps[direction] = steps[element] + 1;
                         queue.Enqueue(direction);
                     }
             }
         }
     }
+    steps++;
 }
 
 Console.WriteLine(valid.Count);
