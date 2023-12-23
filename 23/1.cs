@@ -1,15 +1,15 @@
 var data = File.ReadAllText("input.txt").Split("\n");
 List<(int, int)> seen = [];
-List<int> depths = [];
-Bfs(0, "", (0, 1), data, depths);
+List<int> finishedSteps = [];
+Bfs(0, "", (0, 1), data, finishedSteps);
 
-void Bfs(int depth, string path, (int, int) location, string[] data, List<int> depths)
+void Bfs(int steps, string path, (int, int) location, string[] data, List<int> finishedSteps)
 {
     var directions = new List<(int, int)>();
 
     if (data[location.Item1][location.Item2] != '#')
     {
-        depths.Add(depth);
+        finishedSteps.Add(steps);
         path += location;
         if (data[location.Item1][location.Item2] == 'v')
         {
@@ -41,12 +41,12 @@ void Bfs(int depth, string path, (int, int) location, string[] data, List<int> d
             if (direction.Item1 >= 0 && direction.Item1 < data.Length && direction.Item2 >= 0 && direction.Item2 < data[0].Length && !path.Contains("" + direction))
             {
                 if (directions.Count > 1)
-                    Bfs(depth + 1, path.ToString(), direction, data, depths);
+                    Bfs(steps + 1, path.ToString(), direction, data, finishedSteps);
                 else
-                    Bfs(depth + 1, path, direction, data, depths);
+                    Bfs(steps + 1, path, direction, data, finishedSteps);
             }
         }
     }
 }
 
-Console.WriteLine(depths.Max());
+Console.WriteLine(finishedSteps.Max());
