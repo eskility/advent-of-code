@@ -1,8 +1,8 @@
 var data = File.ReadAllText("input.txt").Split("\n");
 List<int> finishedSteps = [];
-Bfs(0, "", (0, 1), data, finishedSteps);
+DFS(0, "", (0, 1), data, finishedSteps);
 
-void Bfs(int steps, string path, (int, int) location, string[] data, List<int> finishedSteps)
+void DFS(int steps, string path, (int, int) location, string[] data, List<int> finishedSteps)
 {
     var directions = new List<(int, int)>();
 
@@ -39,7 +39,7 @@ void Bfs(int steps, string path, (int, int) location, string[] data, List<int> f
         {
             if (direction.Item1 >= 0 && direction.Item1 < data.Length && direction.Item2 >= 0 && direction.Item2 < data[0].Length && !path.Contains("" + direction))
             
-                    Bfs(steps + 1, path.ToString(), direction, data, finishedSteps);
+                    DFS(steps + 1, path.ToString(), direction, data, finishedSteps);
         }
     }
 }
