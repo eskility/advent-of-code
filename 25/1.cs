@@ -1,6 +1,8 @@
-//This is inspired by comments on reddit. The reason why it works is 
+//This is inspired by comments on reddit. Pick a random node and count the unique 
+// paths between it and all the other nodes.  The reason why it works is 
 // because we know nodes that have three or less unique paths between
 // them and a random node must belong to another group than the random node.
+// We use BFS to find the paths.
 
 Dictionary<string, HashSet<string>> graph = [];
 var data = File.ReadAllLines("input.txt");
@@ -42,9 +44,8 @@ foreach (var x in graph.Keys.Skip(1))
         }
         HashSet<string> seen = [];
         Queue<(string, HashSet<string>)> queue = [];
-        var found = false;
         queue.Enqueue((y, new HashSet<string> { y }));
-        while (queue.Count > 0 && !found && connections < 4)
+        while (queue.Count > 0)
         {
             var nodeAndPath = queue.Dequeue();
             var node = nodeAndPath.Item1;
@@ -55,7 +56,7 @@ foreach (var x in graph.Keys.Skip(1))
                 {
                     connections += 1;
                     paths.UnionWith(path);
-                    found = true;
+                    queue.Clear();
                     break;
                 }
                 else if (!seen.Contains(c) && !path.Contains(c) && !paths.Contains(c))
