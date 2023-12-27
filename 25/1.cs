@@ -1,3 +1,6 @@
+//This is inspired by comments on reddit. The reason why it works is 
+// because we know nodes that have three or less unique paths between
+// them and a random node must belong to another group than the random node.
 
 Dictionary<string, HashSet<string>> graph = [];
 var data = File.ReadAllLines("input.txt");
@@ -26,9 +29,10 @@ var firstNode = graph.First().Key;
 
 foreach (var x in graph.Keys.Skip(1))
 {
-    int connections = 0;
-    HashSet<string> usedNodes = [];
-    usedNodes.Add(firstNode);
+    var connections = 0;
+    HashSet<string> paths = [];
+    paths.Add(firstNode);
+
     foreach (var y in graph[firstNode])
     {
         if (x == y)
@@ -38,24 +42,26 @@ foreach (var x in graph.Keys.Skip(1))
         }
         HashSet<string> seen = [];
         Queue<(string, HashSet<string>)> queue = [];
+        var found = false;
         queue.Enqueue((y, new HashSet<string> { y }));
-        bool found = false;
         while (queue.Count > 0 && !found && connections < 4)
         {
-            var compPath = queue.Dequeue();
-            string comp = compPath.Item1;
-            var path = compPath.Item2;
-            foreach (var c in graph[comp])
+            var nodeAndPath = queue.Dequeue();
+            var node = nodeAndPath.Item1;
+            var path = nodeAndPath.Item2;
+            foreach (var c in graph[node])
             {
                 if (x == c)
                 {
                     connections += 1;
-                    usedNodes.UnionWith(path);
+                    paths.UnionWith(path);
                     found = true;
                     break;
                 }
-                else if (!seen.Contains(c) && !path.Contains(c) && !usedNodes.Contains(c))
+                else if (!seen.Contains(c) && !path.Contains(c) && !paths.Contains(c))
                 {
+                    //It's important to make track of the path. We copy it so it stays unique for each
+                    // item we place in the queue
                     var pathcopy = path.ToHashSet();
                     pathcopy.Add(c);
                     queue.Enqueue((c, pathcopy));
