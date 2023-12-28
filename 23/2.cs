@@ -38,8 +38,8 @@ foreach (var (r, c) in graph
     var neighbors = graph[(r, c)];
     var (r1, c1, d1) = neighbors[0];
     var (r2, c2, d2) = neighbors[1];
+   
     var n1 = graph[(r1, c1)];
-
     var i = n1.FindIndex(x => (x.Item1, x.Item2) == (r, c));
     n1[i] = (r2, c2, d1 + d2);
 
