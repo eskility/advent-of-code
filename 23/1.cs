@@ -1,17 +1,18 @@
 
 var data = File.ReadAllText("input.txt").Split("\n");
-List<int> paths = [];
+List<int> totalDepths = [];
 
-DFS(0, new List<(int, int)>(), (0, 1), (data.Length - 1, data[0].Length - 2), data, paths);
+DFS(0, new List<(int, int)>(), (0, 1), (data.Length - 1, data[0].Length - 2), data, totalDepths);
 
-Console.WriteLine(paths.Max());
+Console.WriteLine(totalDepths.Max());
 
 void DFS(int depth, List<(int, int)> seen, (int, int) location, (int, int) target, string[] data, List<int> paths)
 {
     if (location == target)
         paths.Add(depth);
-    else
+    else if (!seen.Contains(location))
     {
+        seen.Add(location);
 
         var directions = new List<(int, int)>();
         if (data[location.Item1][location.Item2] == 'v')
@@ -42,10 +43,8 @@ void DFS(int depth, List<(int, int)> seen, (int, int) location, (int, int) targe
         foreach (var direction in directions)
         {
             if (direction.Item1 >= 0 && direction.Item1 < data.Length && direction.Item2 >= 0
-            && direction.Item2 < data[0].Length && data[direction.Item1][direction.Item2] != '#'
-            && !seen.Contains(direction))
+            && direction.Item2 < data[0].Length && data[direction.Item1][direction.Item2] != '#')
             {
-                seen.Add(direction);
                 //make the seen list unique for every path by copying it using ToList()
                 DFS(depth + 1, seen.ToList(), direction, target, data, paths);
             }
