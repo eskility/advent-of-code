@@ -17,7 +17,6 @@ for (int row = 0; row < data.Length; row++)
             if (column > 0 && data[row][column - 1] != '#')
                 connections.Add((row, column - 1));
 
-
             if (!graph.ContainsKey((row, column)))
                 graph[(row, column)] = [];
 
@@ -25,7 +24,6 @@ for (int row = 0; row < data.Length; row++)
                 if (!graph[(row, column)].Contains((connection.Item1, connection.Item2, 1)))
                     graph[(row, column)].Add((connection.Item1, connection.Item2, 1));
         }
-
     }
 }
 
