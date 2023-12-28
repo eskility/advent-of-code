@@ -48,10 +48,10 @@ foreach (var (r, c) in graph
     n2[i] = (r1, c1, d1 + d2);
 }
 
-List<int> paths = [];
+List<int> totalDepths = [];
 var seen = new List<(int, int)>();
 
-DFS(0, seen, (0, 1), (data.Length - 1, data.Length - 2), graph, paths);
+DFS(0, seen, (0, 1), (data.Length - 1, data.Length - 2), graph, totalDepths);
 
 void DFS(int depth, List<(int, int)> seen, (int, int) location, (int, int) target, Dictionary<(int, int), List<(int, int, int)>> graph, List<int> paths)
 {
@@ -68,4 +68,4 @@ void DFS(int depth, List<(int, int)> seen, (int, int) location, (int, int) targe
         }
     }
 }
-Console.WriteLine(paths.Max());
+Console.WriteLine(totalDepths.Max());
