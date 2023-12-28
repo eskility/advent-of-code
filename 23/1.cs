@@ -6,10 +6,10 @@ DFS(0, new List<(int, int)>(), (0, 1), (data.Length - 1, data[0].Length - 2), da
 
 Console.WriteLine(totalDepths.Max());
 
-void DFS(int depth, List<(int, int)> seen, (int, int) location, (int, int) target, string[] data, List<int> paths)
+void DFS(int depth, List<(int, int)> seen, (int, int) location, (int, int) target, string[] data, List<int> totalDepths)
 {
     if (location == target)
-        paths.Add(depth);
+        totalDepths.Add(depth);
     else if (!seen.Contains(location))
     {
         seen.Add(location);
@@ -46,7 +46,7 @@ void DFS(int depth, List<(int, int)> seen, (int, int) location, (int, int) targe
             && direction.Item2 < data[0].Length && data[direction.Item1][direction.Item2] != '#')
             {
                 //make the seen list unique for every path by copying it using ToList()
-                DFS(depth + 1, seen.ToList(), direction, target, data, paths);
+                DFS(depth + 1, seen.ToList(), direction, target, data, totalDepths);
             }
         }
     }
