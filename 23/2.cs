@@ -51,18 +51,18 @@ var seen = new List<(int, int)>();
 
 DFS(0, seen, (0, 1), (data.Length - 1, data.Length - 2), graph, totalDepths);
 
-void DFS(int depth, List<(int, int)> seen, (int, int) location, (int, int) target, Dictionary<(int, int), List<(int, int, int)>> graph, List<int> paths)
+void DFS(int depth, List<(int, int)> seen, (int, int) location, (int, int) target, Dictionary<(int, int), List<(int, int, int)>> graph, List<int> totalDepths)
 {
     if (location == target)
     {
-        paths.Add(depth);
+        totalDepths.Add(depth);
     }
     else if (!seen.Contains(location))
     {
         seen.Add(location);
         foreach (var direction in graph[location])
         {
-            DFS(depth + direction.Item3, seen.ToList(), (direction.Item1, direction.Item2), target, graph, paths);
+            DFS(depth + direction.Item3, seen.ToList(), (direction.Item1, direction.Item2), target, graph, totalDepths);
         }
     }
 }
