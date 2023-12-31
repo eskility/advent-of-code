@@ -1,4 +1,5 @@
-//Based on HyperNeutrino's answer
+//From HyperNeutrino's youtube guide
+
 var data = File.ReadAllText("input.txt").Split("\n");
 List<int[]> bricks = [];
 
